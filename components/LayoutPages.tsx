@@ -1,4 +1,4 @@
-import { LayoutPagesInterface } from "@/types/types";
+import { LayoutPagesInterface } from "@/types/types.d";
 import Head from "next/head";
 
 export default function LayoutPages({ children, title }: LayoutPagesInterface) {
