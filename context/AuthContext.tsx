@@ -9,8 +9,14 @@ interface Props {
   children: ReactNode;
 }
 
-export default function AuthContext({ dataUser, children }: Props) {
-  const [user, setUser] = useState();
+interface UserInterface {
+  user: object;
+  setUser: Function;
+}
+
+export default function AuthContext({ children }: Props) {
+  const [user, setUser] = useState<UserInterface>();
+
   useEffect(() => {
     const token = window.localStorage.getItem("sessionid");
     if (token) {
@@ -26,6 +32,7 @@ export default function AuthContext({ dataUser, children }: Props) {
         });
     }
   }, []);
+
   return (
     <ContextAuth.Provider value={{ user, setUser }}>
       {children}

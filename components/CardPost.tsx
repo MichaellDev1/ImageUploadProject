@@ -1,12 +1,12 @@
+import React from "react";
 import Image from "next/image";
 import { Post } from "../types/types.d";
 import { FormEvent, Key, use, useEffect, useState } from "react";
-import { comment } from "postcss";
-import { AiFillLike, AiOutlineLike, AiOutlineDelete } from "react-icons/ai";
-import { FaRegComment } from "react-icons/fa";
-import { TbShare3 } from "react-icons/tb";
+import { AiOutlineDelete } from "react-icons/ai";
 
 import { useAuthConsumer } from "@/context/AuthContext";
+import { IconChat, IconHeartLike, IconHeartNotLike, IconShare } from "./Icons";
+import Link from "next/link";
 
 interface handleProps {
   _id: string | Key;
@@ -18,14 +18,16 @@ interface CommentInterface {
   username?: string;
 }
 
-export default function CardPost({
+function CardPost({
   image,
   likes,
   title,
   _id,
   description,
   comment,
-  createdAt,
+  username,
+  id_user,
+  pathImageUser,
 }: Post) {
   const [likeLength, setLikeLengh] = useState<number>(likes.length);
   const [newComent, setNewComment] = useState<Array<object>>(comment);
@@ -37,8 +39,8 @@ export default function CardPost({
 
   useEffect(() => {
     if (user) {
-      setIsLike(likes.includes(user._id));
-      setOwner(user.rol.includes("owner"));
+      setIsLike(user ? likes.includes(user._id) : false);
+      setOwner(user && user.rol.includes("owner"));
     }
   }, [user]);
 
@@ -117,72 +119,93 @@ export default function CardPost({
 
   return (
     <li key={_id}>
-      <div className="w-[400px] p-5 relative">
-        <div className="flex justify-between  w-full min-h-[40px] items-center relative">
-          {isOwner && (
-            <button
-              className="absolute right-1 text-2xl top-3"
-              onClick={handleDelete}
-            >
-              <AiOutlineDelete />
-            </button>
-          )}
-          <h5 className="text-base font-semibold text-neutro-900">{title}</h5>
+      <style jsx>{`
+        .btn-delete {
+          opacity: 0;
+        }
+        .btn-delete:hover {
+          opacity: 0;
+          background: #00000077;
+        }
+        .card-post:hover .btn-delete {
+          opacity: 1;
+        }
+      `}</style>
+      <div className="w-[300px] relative card-post">
+        <div className="w-full flex items-center gap-1 min-h-[20px] justify-between mb-2">
+          <Link
+            href={`/user/${username}`}
+            className="flex gap-1 items-center"
+          >
+            <div className="w-[32px] h-[32px] rounded-full overflow-hidden">
+              <Image
+                src=''
+                alt="image user"
+                width={100}
+                height={100}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <span className="font-semibold text-[13px]">@{username}</span>
+          </Link>
         </div>
-        <div className="w-[100%] h-[300px] relative overflow-hidden">
+
+        <div className="w-[100%] h-[300px] relative overflow-hidden cursor-pointer rounded-md">
           <Image
             alt={`image post id ${_id}`}
             src={`http://localhost:4000/post/image/${image}`}
-            width={300}
+            width={500}
             className="w-full h-[100%] object-cover"
-            height={200}
+            height={500}
           />
-        </div>
-        <div className="flex flex-col">
-          <div className="flex items-center gap-3 w-full justify-start mt-2 mb-[2px]">
-            <div>
-              <button
-                onClick={() => handleLike({ _id })}
-                className="flex flex-col text-[27px] text-neutro-900"
-              >
-                <span>
-                  {isLike ? (
-                    <span className="text-sky-600">
-                      <AiFillLike />
-                    </span>
-                  ) : (
-                    <AiOutlineLike />
-                  )}
-                </span>
-              </button>
-            </div>
-            <button className=" text-[27px] text-neutro-900">
-              <span>
-                <FaRegComment />
-              </span>
-            </button>
-            <button className=" text-[27px] text-neutro-900">
-              <TbShare3 />
-            </button>
-          </div>
-          <div>
-            <span className="text-base text-neutro-900 font-semibold">
-              {likeLength > 0
-                ? likeLength == 1 && isLike
-                  ? "Te a gustado este post"
-                  : `A ${likeLength} ${
-                      likeLength > 1 ? "personas" : "persona"
-                    } le gusto este post`
-                : ""}
-            </span>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-neutral-500">
+          <div className="flex flex-col z-10 bottom-2 left-2 max-w-[80%] absolute">
+            <h5 className="text-sm font-semibold text-neutral-100 text-neutro-900">
+              {title}
+            </h5>
+            <p className="text-[13px] font-normal text-[#bdbdbd]">
               {description}
             </p>
           </div>
         </div>
-
+        <div className="flex flex-col">
+          <div className="flex items-center gap-3 w-full justify-start mt-4 mb-2">
+            <button className=" text-[25px] cursor-pointer text-neutro-900">
+              <span>
+                <IconChat />
+              </span>
+            </button>
+            <div>
+              <button
+                onClick={() => handleLike({ _id })}
+                className="flex flex-col text-[25px] text-neutro-900 cursor-pointer"
+              >
+                <span>
+                  {isLike ? (
+                    <span className="text-sky-600">
+                      <IconHeartLike />
+                    </span>
+                  ) : (
+                    <IconHeartNotLike />
+                  )}
+                </span>
+              </button>
+            </div>
+            <button className=" text-[25px] cursor-pointer text-neutro-900">
+              <IconShare />
+            </button>
+          </div>
+          <div className="min-h-[20px]">
+            <span className="text-base text-white font-semibold">
+              {likeLength > 0
+                ? likeLength == 1 && isLike
+                  ? "Te a gustado este post"
+                  : `A ${likeLength} ${
+                      likeLength > 1 ? "personas le han" : "persona le a"
+                    } gusto este post`
+                : ""}
+            </span>
+          </div>
+        </div>
         <div>
           {/* <ul className="flex flex-col gap-5 ">
             {newComent.length > 0 ? (
@@ -217,3 +240,5 @@ export default function CardPost({
     </li>
   );
 }
+
+export default React.memo(CardPost);

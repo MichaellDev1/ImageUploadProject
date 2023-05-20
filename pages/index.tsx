@@ -2,16 +2,22 @@ import LayoutPages from "@/components/LayoutPages";
 import ListPost from "@/components/ListPost";
 import React, { useEffect, useState } from "react";
 import { Post } from "@/types/types.d";
+import { useAuthConsumer } from "@/context/AuthContext";
+import { useRouter } from "next/router";
 
 interface Props {
   posts: Array<Post>;
 }
 
 export default function Home({ posts }: Props) {
+  console.log(posts)
+  const router = useRouter();
+ 
   return (
     <LayoutPages title="Home">
-      <main className="w-full min-h-[100vh] flex justify-center items-center">
+      <main className="w-full min-h-[100vh] px-10 flex justify-center items-center">
         <ListPost posts={posts} />
+        
       </main>
     </LayoutPages>
   );

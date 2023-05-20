@@ -7,11 +7,14 @@ export interface LayoutPagesInterface {
 
 export interface Post {
   comment: Array<object>;
-  createdAt: Date;
+  createdAt: Date | string;
   description?: string;
   image: string;
   likes: Array<string | null>;
   title?: string;
-  updatedAt: Date;
+  updatedAt: Date | string;
+  id_user: string;
+  pathImageUser: string;
+  username: string;
   _id: string | Key;
 }

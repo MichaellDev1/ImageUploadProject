@@ -15,15 +15,19 @@ export default function Upload() {
   });
   const { user } = useAuthConsumer();
 
+  console.log(user)
+
   const formData = new FormData();
 
   const handleCreatePost = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (image == "") return;
+    if (image == "" || !user) return;
 
     formData.append("file", image);
     formData.append("title", titleDescription.title);
     formData.append("description", titleDescription.description);
+    formData.append("pathImageUser", user.image);
+
 
     fetch("http://localhost:4000/post/create", {
       method: "POST",
