@@ -1,21 +1,15 @@
-import { NextComponentType, NextPageContext } from "next";
+import { UserInterface } from "@/types/types.d";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
 
-const ContextAuth = createContext({});
+const ContextAuth = createContext(undefined);
 
 interface Props {
-  dataUser: object | null | undefined;
   children: ReactNode;
 }
 
-interface UserInterface {
-  user: object;
-  setUser: Function;
-}
-
 export default function AuthContext({ children }: Props) {
-  const [user, setUser] = useState<UserInterface>();
+  const [user, setUser] = useState<UserInterface | undefined>();
 
   useEffect(() => {
     const token = window.localStorage.getItem("sessionid");
@@ -38,6 +32,11 @@ export default function AuthContext({ children }: Props) {
       {children}
     </ContextAuth.Provider>
   );
+}
+
+interface DataSend {
+  setUser: Function;
+  user: UserInterface;
 }
 
 export const useAuthConsumer = () => {

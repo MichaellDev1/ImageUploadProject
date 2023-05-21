@@ -7,6 +7,7 @@ export default function Login() {
     password: "",
   });
   const router = useRouter();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch("http://localhost:4000/auth/login", {
@@ -19,8 +20,8 @@ export default function Login() {
       .then((res) => res.json())
       .then((res) => {
         if (res.user) {
-          window.localStorage.setItem("sessionid", res.token);
-          return router.push("/");
+          window.window.localStorage.setItem("sessionid", res.token);
+          return window.location.href = '/'
         }
       });
   };

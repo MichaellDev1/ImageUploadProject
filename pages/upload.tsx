@@ -1,6 +1,6 @@
 import LayoutPages from "@/components/LayoutPages";
 import { useAuthConsumer } from "@/context/AuthContext";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 interface StatePost {
   title: string;
@@ -15,8 +15,6 @@ export default function Upload() {
   });
   const { user } = useAuthConsumer();
 
-  console.log(user)
-
   const formData = new FormData();
 
   const handleCreatePost = (e: React.FormEvent<HTMLFormElement>) => {
@@ -27,7 +25,6 @@ export default function Upload() {
     formData.append("title", titleDescription.title);
     formData.append("description", titleDescription.description);
     formData.append("pathImageUser", user.image);
-
 
     fetch("http://localhost:4000/post/create", {
       method: "POST",

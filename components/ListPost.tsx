@@ -21,6 +21,7 @@ export default function ListPost({ posts }: Props) {
           id_user,
           pathImageUser,
           username,
+          isVerified,
         }: Post) => (
           <CardPost
             _id={_id}
@@ -31,6 +32,7 @@ export default function ListPost({ posts }: Props) {
             username={username}
             title={title}
             likes={likes}
+            isVerified={isVerified}
             comment={comment}
             image={image}
             key={_id}
