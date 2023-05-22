@@ -9,6 +9,7 @@ export interface Comment {
   id_user?: string;
   isVerified: boolean;
   username?: string;
+  image: string;
   comment?: string;
 }
 
@@ -22,18 +23,16 @@ export interface UserInterface {
 }
 
 export interface Post {
-  comment: Array<Comment>;
-  createdAt: Date | string;
-  description?: string;
-  image: string;
-  likes: Array<string | null>;
-  title?: string;
-  updatedAt: Date | string;
-  isVerified: boolean;
-  id_user: string;
-  pathImageUser: string;
   username: string;
-  _id: string | Key;
+  isVerified: boolean;
+  likes: Array<string>;
+  title: string;
+  image: string;
+  description: string;
+  createdAt: Date;
+  _id: string;
+  pathImageUser: string;
+  updatedAt: Date;
 }
 
 export interface Porfile {
@@ -41,6 +40,8 @@ export interface Porfile {
   username: string;
   verified: boolean;
   _id: string;
+  followers: number;
+  inARow: number;
 }
 
 export interface PorfileUser {

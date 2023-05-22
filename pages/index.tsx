@@ -8,7 +8,6 @@ interface Props {
 }
 
 export default function Home({ posts }: Props) {
-  console.log(posts)
   return (
     <LayoutPages title="Home">
       <main className="w-full px-10 min-h-[80vh] flex justify-center items-center">

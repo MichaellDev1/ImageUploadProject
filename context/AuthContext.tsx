@@ -22,6 +22,7 @@ export default function AuthContext({ children }: Props) {
       })
         .then((res) => res.json())
         .then((res) => {
+          console.log(res);
           setUser({ ...res, token });
         });
     }

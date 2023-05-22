@@ -24,7 +24,6 @@ export default function Upload() {
     formData.append("file", image);
     formData.append("title", titleDescription.title);
     formData.append("description", titleDescription.description);
-    formData.append("pathImageUser", user.image);
 
     fetch("http://localhost:4000/post/create", {
       method: "POST",

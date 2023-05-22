@@ -8,32 +8,30 @@ interface Props {
 
 export default function ListPost({ posts }: Props) {
   return (
-    <ul className="flex flex-wrap w-full justify-center gap-10">
+    <ul className="flex flex-wrap items-center w-full justify-center gap-14">
       {posts.map(
         ({
           image,
           likes,
           title,
-          _id,
           description,
           createdAt,
-          comment,
-          id_user,
-          pathImageUser,
+          updatedAt,
+          _id,
           username,
           isVerified,
+          pathImageUser,
         }: Post) => (
           <CardPost
             _id={_id}
+            pathImageUser={pathImageUser}
             description={description}
             createdAt={createdAt}
-            id_user={id_user}
-            pathImageUser={pathImageUser}
+            updatedAt={updatedAt}
             username={username}
             title={title}
             likes={likes}
             isVerified={isVerified}
-            comment={comment}
             image={image}
             key={_id}
           />

@@ -15,3 +15,23 @@ body {
     box-sizing: border-box;
     outline: none;
 }
+
+div::-webkit-scrollbar {
+    width: 7px;
+}
+
+.content-image::after {
+    content: "";
+    width: 100%;
+    height: 25%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(#0a0a0a00, #0c0c0c);
+}
+
+
+div::-webkit-scrollbar-thumb {
+    background-color: rgb(219, 219, 219);
+    border-radius: 20px;
+}
