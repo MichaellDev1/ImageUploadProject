@@ -1,28 +1,38 @@
 import LayoutPages from "@/components/LayoutPages";
-import { list } from "postcss";
-import React, { useEffect, useMemo, useState } from "react";
+import { useAuthConsumer } from "@/context/AuthContext";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:4000");
-
 interface Message {
-  room: string;
-  username: string;
+  senderId: string;
   message: string;
+  receivedId: string;
 }
 
 export default function Chat() {
+  const { user } = useAuthConsumer();
   const [currentMessage, setCurrentMessage] = useState<string>("");
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
   const [allMessage, setAllMessage] = useState<Array<Message>>([]);
 
+  const socket = useMemo(() => io("http://localhost:4000"), []);
+
+  useEffect(() => {
+    if (user) {
+      socket.emit("add_user", user._id);
+      socket.on("get_users", (res) => {
+        console.log(res);
+      });
+    }
+  }, [user, socket]);
+
   const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (currentMessage !== "") {
+    if (currentMessage !== "" && user) {
       const messageData = {
-        room,
-        username,
+        senderId: user._id,
+        receivedId: room,
         message: currentMessage,
       };
 
@@ -36,9 +46,9 @@ export default function Chat() {
       setAllMessage((list) => [...list, message]);
     };
 
-    socket.on("receive_message", receivedMessage);
+    socket.on("get_message", receivedMessage);
     return () => {
-      socket.off("receive_message", receivedMessage);
+      socket.off("get_message", receivedMessage);
     };
   }, [socket]);
 
@@ -46,29 +56,17 @@ export default function Chat() {
     setCurrentMessage(e.target.value);
   };
 
-  const handleRoom = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (username && room) {
-      socket.emit("join_room", room);
-    }
-  };
-
   return (
     <LayoutPages title="Chat">
       <h3>Hello to Chat</h3>
 
-      <form onSubmit={handleRoom}>
-        <input
-          type="text"
-          name="Name"
-          onChange={(e) => setUsername(e.target.value)}
-        />
+      <form>
         <input
           type="text"
           name="Room"
           onChange={(e) => setRoom(e.target.value)}
         />
-        <button>Join a Room</button>
+        <button>Id user</button>
       </form>
 
       <form action="" onSubmit={sendMessage}>
